@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React, { useRef, useState, useEffect } from 'react';
+import { auth, firestore } from './Server/Firebase.js';
+import UseGeoLocation from './Helper/UseGeoLocation.js';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import firebase from 'firebase/compat/app';
+import SignIn from './Components/SignIn.js';
+import SignOut from './Components/SignOut.js';
+import { ChatRoom } from './Components/Chatroom.js';  
+import MainPage from './Components/MainPage/MainPage.js';
+import { BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
+import './Style.css';
 
 function App() {
+  const [user] = useAuthState(auth);
+  // const location = UseGeoLocation();
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Routes>
+          <Route path="/SignIn" element={<SignIn />} />
+          <Route path="/" element={user ? <MainPage /> : <SignIn />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
 
 export default App;
+
